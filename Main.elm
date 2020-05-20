@@ -47,22 +47,19 @@ shapeToArray s =
             , "⬜⬜⬜⬜"
             ], 1 )
         Just T ->
-          ( [ "⬜⬜⬜⬜"
-            , "⬜⬛⬜⬜"
-            , "⬜⬛⬛⬜"
-            , "⬜⬛⬜⬜"
+          ( [ "⬜⬛⬜"
+            , "⬜⬛⬛"
+            , "⬜⬛⬜"
             ], 2 )
         Just S ->
-          ( [ "⬜⬜⬜⬜"
-            , "⬜⬛⬜⬜"
-            , "⬜⬛⬛⬜"
-            , "⬜⬜⬛⬜"
+          ( [ "⬛⬜⬜"
+            , "⬛⬛⬜"
+            , "⬜⬛⬜"
             ], 3 )
         Just Z ->
-          ( [ "⬜⬜⬜⬜"
-            , "⬜⬜⬛⬜"
-            , "⬜⬛⬛⬜"
-            , "⬜⬛⬜⬜"
+          ( [ "⬜⬜⬛"
+            , "⬜⬛⬛"
+            , "⬜⬛⬜"
             ], 4 )
         Just I ->
           ( [ "⬜⬛⬜⬜"
@@ -71,16 +68,14 @@ shapeToArray s =
             , "⬜⬛⬜⬜"
             ], 5 )
         Just J ->
-          ( [ "⬜⬜⬜⬜"
-            , "⬜⬜⬛⬜"
-            , "⬜⬜⬛⬜"
-            , "⬜⬛⬛⬜"
+          ( [ "⬜⬛⬜"
+            , "⬜⬛⬜"
+            , "⬛⬛⬜"
             ], 6 )
         Just L ->
-          ( [ "⬜⬜⬜⬜"
-            , "⬜⬛⬜⬜"
-            , "⬜⬛⬜⬜"
-            , "⬜⬛⬛⬜"
+          ( [ "⬜⬛⬜"
+            , "⬜⬛⬜"
+            , "⬜⬛⬛"
             ], 7 )
         _ ->
           ( [ "⬜⬜⬜⬜"
@@ -122,7 +117,7 @@ initialModel =
   }
 
 emptyField =
-  Array.repeat 11 (Array.repeat 11 0)
+  Array.repeat 17 (Array.repeat 10 0)
 
 -- "⬛⬜"
 
@@ -253,7 +248,10 @@ update msg model =
           ( model, perform Start Time.now)
         else
           case mOpt of
-            Just (Rotate d) -> noChange
+            Just (Rotate d) ->
+              ( rotate model d
+              , Cmd.none
+              )
             Just (Move d) ->
               if checkCollision model.field model.current d
               then
@@ -301,12 +299,34 @@ update msg model =
                     }
                   , Cmd.none
                   )
-            Just SpeedUp -> noChange
+            Just SpeedUp ->
+              if checkCollision model.field model.current Down
+                then
+                  (
+                    { model |
+                      current =
+                        { x = model.current.x
+                        , y = model.current.y + 1
+                        , shape = model.current.shape
+                        }
+                    }
+                    |> checkDestroy
+                  , Cmd.none
+                  )
+                else
+                  noChange
             Just Drop -> noChange
             _ -> noChange
 
 checkDestroy model =
   let
+    width =
+      ( Maybe.withDefault
+        Array.empty
+        (Array.get 0 model.field)
+      )
+        |> Array.length
+
     length = Array.length model.field
     lineDestr0yer =
       Array.filter
@@ -319,7 +339,7 @@ checkDestroy model =
       Array.append
         ( Array.repeat
           (length - (Array.length lineDestr0yer))
-          (Array.repeat 11 0)
+          (Array.repeat width 0)
         )
         lineDestr0yer
   in
@@ -330,9 +350,58 @@ checkDestroy model =
     , currentTick = (model.currentTick + 1) |> log "tick"
     }
 
+rotate model d =
+  let
+    target = model.current.shape
+    size = Array.length target
+    newArray = Array.repeat size (Array.repeat size 0)
+    rotatedX y = if d == Left then size-y-1 else y
+    rotatedY x = if d == Left then x else size-x-1
+    setHelper x y arr =
+      let
+        helper =
+          ( Maybe.withDefault 0
+            (array2dGet (rotatedX y) (rotatedY x) target)
+          )
+      in
+        if helper /= 0
+        then
+          array2dSet x y helper arr
+        else
+          arr
+
+    rotateHelper =
+      List.range 0 (size - 1)
+        |> List.concatMap
+          (\x ->
+            List.range 0 (size - 1)
+              |> List.map (\y -> ( x, y ))
+          )
+        |> List.foldl
+          (\( x, y ) arr ->
+            setHelper x y arr
+          )
+          newArray
+    newCurrent x_ y_ =
+      { shape = rotateHelper
+      , x = model.current.x + x_
+      , y = model.current.y + y_
+      }
+
+  in
+    if
+      checkCollision
+        model.field
+        (newCurrent 0 -1)
+        Down
+    then
+      { model | current = newCurrent 0 0 }
+    else
+      model
+
+
 verifyFalling current field =
   let
-    logs = current
     helper : (Int ,Int) -> Array2d -> Int
     helper (x,y) target =
       array2dGet x y target
