@@ -5238,8 +5238,8 @@ var $elm$core$Array$repeat = F2(
 	});
 var $author$project$Main$emptyField = A2(
 	$elm$core$Array$repeat,
-	11,
-	A2($elm$core$Array$repeat, 11, 0));
+	17,
+	A2($elm$core$Array$repeat, 10, 0));
 var $author$project$Main$initialModel = {
 	canGoDown: false,
 	current: {shape: $elm$core$Array$empty, x: 4, y: 0},
@@ -6318,7 +6318,21 @@ var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
 	});
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
 var $author$project$Main$checkDestroy = function (model) {
+	var width = $elm$core$Array$length(
+		A2(
+			$elm$core$Maybe$withDefault,
+			$elm$core$Array$empty,
+			A2($elm$core$Array$get, 0, model.field)));
 	var lineDestr0yer = A2(
 		$elm$core$Array$filter,
 		A2(
@@ -6335,7 +6349,7 @@ var $author$project$Main$checkDestroy = function (model) {
 		A2(
 			$elm$core$Array$repeat,
 			length - $elm$core$Array$length(lineDestr0yer),
-			A2($elm$core$Array$repeat, 11, 0)),
+			A2($elm$core$Array$repeat, width, 0)),
 		lineDestr0yer);
 	return _Utils_update(
 		model,
@@ -6528,82 +6542,6 @@ var $author$project$Main$nextGen = A2(
 	$author$project$Main$O,
 	_List_fromArray(
 		[$author$project$Main$T, $author$project$Main$S, $author$project$Main$Z, $author$project$Main$I, $author$project$Main$L, $author$project$Main$J]));
-var $elm$core$String$foldr = _String_foldr;
-var $elm$core$String$toList = function (string) {
-	return A3($elm$core$String$foldr, $elm$core$List$cons, _List_Nil, string);
-};
-var $author$project$Main$shapeToArray = function (s) {
-	var _v0 = function () {
-		if (s.$ === 'Just') {
-			switch (s.a.$) {
-				case 'O':
-					var _v2 = s.a;
-					return _Utils_Tuple2(
-						_List_fromArray(
-							['⬜⬜⬜⬜', '⬜⬛⬛⬜', '⬜⬛⬛⬜', '⬜⬜⬜⬜']),
-						1);
-				case 'T':
-					var _v3 = s.a;
-					return _Utils_Tuple2(
-						_List_fromArray(
-							['⬜⬜⬜⬜', '⬜⬛⬜⬜', '⬜⬛⬛⬜', '⬜⬛⬜⬜']),
-						2);
-				case 'S':
-					var _v4 = s.a;
-					return _Utils_Tuple2(
-						_List_fromArray(
-							['⬜⬜⬜⬜', '⬜⬛⬜⬜', '⬜⬛⬛⬜', '⬜⬜⬛⬜']),
-						3);
-				case 'Z':
-					var _v5 = s.a;
-					return _Utils_Tuple2(
-						_List_fromArray(
-							['⬜⬜⬜⬜', '⬜⬜⬛⬜', '⬜⬛⬛⬜', '⬜⬛⬜⬜']),
-						4);
-				case 'I':
-					var _v6 = s.a;
-					return _Utils_Tuple2(
-						_List_fromArray(
-							['⬜⬛⬜⬜', '⬜⬛⬜⬜', '⬜⬛⬜⬜', '⬜⬛⬜⬜']),
-						5);
-				case 'J':
-					var _v7 = s.a;
-					return _Utils_Tuple2(
-						_List_fromArray(
-							['⬜⬜⬜⬜', '⬜⬜⬛⬜', '⬜⬜⬛⬜', '⬜⬛⬛⬜']),
-						6);
-				default:
-					var _v8 = s.a;
-					return _Utils_Tuple2(
-						_List_fromArray(
-							['⬜⬜⬜⬜', '⬜⬛⬜⬜', '⬜⬛⬜⬜', '⬜⬛⬛⬜']),
-						7);
-			}
-		} else {
-			return _Utils_Tuple2(
-				_List_fromArray(
-					['⬜⬜⬜⬜', '⬜⬜⬜⬜', '⬜⬜⬜⬜', '⬜⬜⬜⬜']),
-				0);
-		}
-	}();
-	var strList = _v0.a;
-	var color = _v0.b;
-	return $elm$core$Array$fromList(
-		A2(
-			$elm$core$List$map,
-			function (str) {
-				return $elm$core$Array$fromList(
-					A2(
-						$elm$core$List$map,
-						function (c) {
-							return _Utils_eq(
-								c,
-								_Utils_chr('⬜')) ? 0 : color;
-						},
-						$elm$core$String$toList(str)));
-			},
-			strList));
-};
 var $elm$core$Array$setHelp = F4(
 	function (shift, index, value, tree) {
 		var pos = $elm$core$Array$bitMask & (index >>> shift);
@@ -6646,15 +6584,6 @@ var $elm$core$Array$set = F3(
 			A4($elm$core$Array$setHelp, startShift, index, value, tree),
 			tail));
 	});
-var $elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
-		}
-	});
 var $author$project$Main$array2dSet = F4(
 	function (x, y, after, arr) {
 		return A3(
@@ -6670,6 +6599,143 @@ var $author$project$Main$array2dSet = F4(
 					A2($elm$core$Array$get, y, arr))),
 			arr);
 	});
+var $elm$core$Basics$neq = _Utils_notEqual;
+var $author$project$Main$rotate = F2(
+	function (model, d) {
+		var target = model.current.shape;
+		var size = $elm$core$Array$length(target);
+		var rotatedY = function (x) {
+			return _Utils_eq(d, $author$project$Main$Left) ? x : ((size - x) - 1);
+		};
+		var rotatedX = function (y) {
+			return _Utils_eq(d, $author$project$Main$Left) ? ((size - y) - 1) : y;
+		};
+		var setHelper = F3(
+			function (x, y, arr) {
+				var helper = A2(
+					$elm$core$Maybe$withDefault,
+					0,
+					A3(
+						$author$project$Main$array2dGet,
+						rotatedX(y),
+						rotatedY(x),
+						target));
+				return (!(!helper)) ? A4($author$project$Main$array2dSet, x, y, helper, arr) : arr;
+			});
+		var newArray = A2(
+			$elm$core$Array$repeat,
+			size,
+			A2($elm$core$Array$repeat, size, 0));
+		var rotateHelper = A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v0, arr) {
+					var x = _v0.a;
+					var y = _v0.b;
+					return A3(setHelper, x, y, arr);
+				}),
+			newArray,
+			A2(
+				$elm$core$List$concatMap,
+				function (x) {
+					return A2(
+						$elm$core$List$map,
+						function (y) {
+							return _Utils_Tuple2(x, y);
+						},
+						A2($elm$core$List$range, 0, size - 1));
+				},
+				A2($elm$core$List$range, 0, size - 1)));
+		var newCurrent = F2(
+			function (x_, y_) {
+				return {shape: rotateHelper, x: model.current.x + x_, y: model.current.y + y_};
+			});
+		return A3(
+			$author$project$Main$checkCollision,
+			model.field,
+			A2(newCurrent, 0, -1),
+			$author$project$Main$Down) ? _Utils_update(
+			model,
+			{
+				current: A2(newCurrent, 0, 0)
+			}) : model;
+	});
+var $elm$core$String$foldr = _String_foldr;
+var $elm$core$String$toList = function (string) {
+	return A3($elm$core$String$foldr, $elm$core$List$cons, _List_Nil, string);
+};
+var $author$project$Main$shapeToArray = function (s) {
+	var _v0 = function () {
+		if (s.$ === 'Just') {
+			switch (s.a.$) {
+				case 'O':
+					var _v2 = s.a;
+					return _Utils_Tuple2(
+						_List_fromArray(
+							['⬜⬜⬜⬜', '⬜⬛⬛⬜', '⬜⬛⬛⬜', '⬜⬜⬜⬜']),
+						1);
+				case 'T':
+					var _v3 = s.a;
+					return _Utils_Tuple2(
+						_List_fromArray(
+							['⬜⬛⬜', '⬜⬛⬛', '⬜⬛⬜']),
+						2);
+				case 'S':
+					var _v4 = s.a;
+					return _Utils_Tuple2(
+						_List_fromArray(
+							['⬛⬜⬜', '⬛⬛⬜', '⬜⬛⬜']),
+						3);
+				case 'Z':
+					var _v5 = s.a;
+					return _Utils_Tuple2(
+						_List_fromArray(
+							['⬜⬜⬛', '⬜⬛⬛', '⬜⬛⬜']),
+						4);
+				case 'I':
+					var _v6 = s.a;
+					return _Utils_Tuple2(
+						_List_fromArray(
+							['⬜⬛⬜⬜', '⬜⬛⬜⬜', '⬜⬛⬜⬜', '⬜⬛⬜⬜']),
+						5);
+				case 'J':
+					var _v7 = s.a;
+					return _Utils_Tuple2(
+						_List_fromArray(
+							['⬜⬛⬜', '⬜⬛⬜', '⬛⬛⬜']),
+						6);
+				default:
+					var _v8 = s.a;
+					return _Utils_Tuple2(
+						_List_fromArray(
+							['⬜⬛⬜', '⬜⬛⬜', '⬜⬛⬛']),
+						7);
+			}
+		} else {
+			return _Utils_Tuple2(
+				_List_fromArray(
+					['⬜⬜⬜⬜', '⬜⬜⬜⬜', '⬜⬜⬜⬜', '⬜⬜⬜⬜']),
+				0);
+		}
+	}();
+	var strList = _v0.a;
+	var color = _v0.b;
+	return $elm$core$Array$fromList(
+		A2(
+			$elm$core$List$map,
+			function (str) {
+				return $elm$core$Array$fromList(
+					A2(
+						$elm$core$List$map,
+						function (c) {
+							return _Utils_eq(
+								c,
+								_Utils_chr('⬜')) ? 0 : color;
+						},
+						$elm$core$String$toList(str)));
+			},
+			strList));
+};
 var $author$project$Main$verifyFalling = F2(
 	function (current, field) {
 		var loopList = A2(
@@ -6683,7 +6749,6 @@ var $author$project$Main$verifyFalling = F2(
 					A2($elm$core$List$range, 0, 3));
 			},
 			A2($elm$core$List$range, 0, 3));
-		var logs = current;
 		var helper = F2(
 			function (_v1, target) {
 				var x = _v1.a;
@@ -6824,7 +6889,9 @@ var $author$project$Main$update = F2(
 						switch (mOpt.a.$) {
 							case 'Rotate':
 								var d = mOpt.a.a;
-								return noChange;
+								return _Utils_Tuple2(
+									A2($author$project$Main$rotate, model, d),
+									$elm$core$Platform$Cmd$none);
 							case 'Move':
 								var d = mOpt.a.a;
 								if (A3($author$project$Main$checkCollision, model.field, model.current, d)) {
@@ -6860,7 +6927,14 @@ var $author$project$Main$update = F2(
 									$elm$core$Platform$Cmd$none));
 							case 'SpeedUp':
 								var _v3 = mOpt.a;
-								return noChange;
+								return A3($author$project$Main$checkCollision, model.field, model.current, $author$project$Main$Down) ? _Utils_Tuple2(
+									$author$project$Main$checkDestroy(
+										_Utils_update(
+											model,
+											{
+												current: {shape: model.current.shape, x: model.current.x, y: model.current.y + 1}
+											})),
+									$elm$core$Platform$Cmd$none) : noChange;
 							default:
 								var _v4 = mOpt.a;
 								return noChange;
