@@ -6796,6 +6796,8 @@ var $author$project$Main$update = F2(
 						model,
 						{
 							isGameOver: false,
+							level: 0,
+							score: 0,
 							startTime: $elm$time$Time$posixToMillis(posix)
 						}),
 					A2($elm$random$Random$generate, $author$project$Main$FirstShape, $author$project$Main$nextGen));
@@ -6819,7 +6821,7 @@ var $author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							$author$project$Main$initialModel,
-							{isGameOver: true}),
+							{isGameOver: true, score: model.score}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					var newPosModel = function () {
