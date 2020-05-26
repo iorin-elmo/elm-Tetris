@@ -151,6 +151,8 @@ update msg model =
         ( { model |
             startTime = posixToMillis posix
           , isGameOver = False
+          , score = 0
+          , level = 0
           }
         , Random.generate FirstShape nextGen
         )
@@ -171,6 +173,7 @@ update msg model =
         then
           ( { initialModel |
               isGameOver = True
+            , score = model.score
             }
           , Cmd.none
           )
