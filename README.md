@@ -1,8 +1,11 @@
 # elm-tetris  
+visit [here](https://iorin-elmo.github.io/elm-Tetris/)  
 ## Command  
 ```sh  
 elm make Main.elm --output=elm.js  
 ```  
+## Version  
+elm 0.19.1  
 ## Progress
 added Move A/D and LineCheck  
 
